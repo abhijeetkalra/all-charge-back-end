@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chargepoint
+  labels:
+    app: chargepoint
+spec:
+  selector:
+    matchLabels:
+      app: chargepoint
+  template:
+    metadata:
+      labels:
+        app: chargepoint
+    spec:
+{{ include "imagePullSecret" . | indent 6 }}
+      imagePullPolicy: {{ .Values.image.pullPolicy }}
+      containers:
+      - name: chargepoint-api
+        image: {{ include "image_repository" . }}/chargepoint-svc:{{ include "image_tag" . }}
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256M
+        env:
+        - name: MONGODB_USERNAME
+          value: chargepoint
+        - name: MONGODB_HOST
+          value: {{ .Values.db.host }}
+        - name: MONGODB_PORT
+          value: {{ .Values.db.port | quote }}
+        - name: MONGODB_PASSWORD
+          value: {{ .Values.db.password }}
+        - name: LOG_LEVEL
+          value: {{ .Values.log_level }}
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always

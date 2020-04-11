@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "type": "docker",
+      "name": "build-user",
+      "build_context": "user-svc",
+      "docker_file": "Dockerfile",
+      "build_only": true,
+      "resources": {
+        "limits": {
+          "cpu": 1,
+          "memory": 1024
+        }
+      },
+      "deployments": [
+        {
+          "type": "docker-registry",
+          "host": "infrabase.azurecr.io",
+          "repository": "ev/user-svc",
+          "target": "prod",
+          "always_push": "false",
+          "username": "infrabase",
+          "password": {
+            "$secret": "INFRABASE_SECRET"
+          }
+        }
+      ]
+    },
+
+    {
+      "type": "docker",
+      "name": "build-chargepoint",
+      "build_context": "chargepoint-svc",
+      "docker_file": "Dockerfile",
+      "build_only": true,
+      "resources": {
+        "limits": {
+          "cpu": 1,
+          "memory": 1024
+        }
+      },
+      "deployments": [
+        {
+          "type": "docker-registry",
+          "host": "infrabase.azurecr.io",
+          "repository": "ev/chargepoint-svc",
+          "target": "prod",
+          "always_push": "false",
+          "username": "infrabase",
+          "password": {
+            "$secret": "INFRABASE_SECRET"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chargepoint
+  labels:
+    app: chargepoint
+spec:
+  selector:
+    matchLabels:
+      app: chargepoint
+  template:
+    metadata:
+      labels:
+        app: chargepoint
+    spec:
+      imagePullSecrets:
+        - name: infrabase
+      containers:
+      - name: chargepoint-api
+        image: infrabase.azurecr.io/ev/chargepoint:prod_1.6
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256M
+        env:
+        - name: MONGODB_USERNAME
+          value: chargepoint
+        - name: MONGODB_PASSWORD
+          value: Sapvora123
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: chargepoint
+  name: chargepoint
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: chargepoint
+  type: ClusterIP

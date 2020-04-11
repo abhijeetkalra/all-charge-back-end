@@ -1,0 +1,25 @@
+
+
+image:
+  repository: infrabase.azurecr.io/ev
+  tag: build_7
+  pullPolicy: Always
+  private: true
+  imagePullSecret: infrabase
+
+db:
+  host: mongo-mongodb
+  port: 27017
+  password: Sapvora123
+
+host: ev.funr.xyz
+
+ingress:
+  enabled: true
+  tls_enabled: true
+  tls_secret: ev-tls
+
+log_level: info
+
+
+

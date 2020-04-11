@@ -1,0 +1,43 @@
+{{ if .Values.ingress.enabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ev
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-body-size: "2048m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "1200"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "route"
+    nginx.ingress.kubernetes.io/session-cookie-hash: "sha1"
+    {{ if .Values.ingress.tls_enabled}}
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    {{ end }}
+
+spec:
+  rules:
+    - host: {{ .Values.host }}
+      http:
+        paths:
+          - path: /api/v1/
+            backend:
+              serviceName: chargepoint
+              servicePort: 8080
+          - path: /swagger.json
+            backend:
+              serviceName: chargepoint
+              servicePort: 8080
+          - path: /user
+            backend:
+              serviceName: user
+              servicePort: 8080
+
+  {{ if .Values.ingress.tls_enabled}}
+  tls:
+    - hosts:
+      - {{ .Values.host }}
+      secretName: {{ .Values.ingress.tls_secret }}
+  {{ end }}
+  {{ end }}

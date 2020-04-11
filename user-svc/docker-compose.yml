@@ -1,0 +1,22 @@
+version: '3.4'
+services:
+  api:
+    build: 
+      context: .
+      target: dev
+    environment:
+      - MONGODB_HOST=mongo
+    volumes:
+      - ./src:/app
+    ports:
+      - '8080:8080'
+    command: python server.py
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:4
+    volumes:
+      - /tmp/data:/data
+
+    
+  

@@ -1,0 +1,7 @@
+MONGODB_HOST = "mongo-mongodb"
+
+MONGODB_PORT = 27017
+
+MONGODB_USERNAME = ""
+
+MONGODB_PASSWORD = ""
