@@ -24,5 +24,5 @@ pyrsistent==0.15.2
 pytz==2019.1
 sentinels==1.0.0
 six==1.12.0
-Werkzeug==0.15.4
+Werkzeug==0.15.5
 WTForms==2.2.1
